@@ -3,6 +3,7 @@ import random
 import linecache
 from keras.utils import Sequence
 from keras.utils.np_utils import to_categorical
+import glob
 
 import code
 
@@ -39,9 +40,11 @@ def load_data(file_path):
             word.
     '''
     data = []
-    for line in open(file_path, encoding='utf-8'):
-        words = line.strip().split()
-        data.append(words)
+    filenames = glob.glob(file_path)
+    for fn in filenames:
+        for line in open(fn, encoding='utf-8'):
+            words = line.strip().split()
+            data.append(words)
 
     return data
 
@@ -149,8 +152,10 @@ class GeneratorPretrainingGenerator(Sequence):
         self.id2word = self.vocab.id2word
         self.raw_vocab = self.vocab.raw_vocab
         self.V = len(self.vocab.word2id)
-        with open(path, 'r', encoding='utf-8') as f:
-            self.n_data = sum(1 for line in f)
+        filenames = glob.glob(path)
+        for fn in filenames:
+            with open(fn, 'r', encoding='utf-8') as f:
+                self.n_data = sum(1 for line in f)
         
         self.shuffle = shuffle
         self.idx = 0
@@ -307,8 +312,10 @@ class DiscriminatorGenerator(Sequence):
         self.id2word = self.vocab.id2word
         self.raw_vocab = self.vocab.raw_vocab
         self.V = len(self.vocab.word2id)
-        with open(path_pos, 'r', encoding='utf-8') as f:
-            self.n_data_pos = sum(1 for line in f)
+        filenames = glob.glob(path_pos)
+        for fn in filenames:
+            with open(fn, 'r', encoding='utf-8') as f:
+                self.n_data_pos = sum(1 for line in f)
         with open(path_neg, 'r', encoding='utf-8') as f:
             self.n_data_neg = sum(1 for line in f)
 
