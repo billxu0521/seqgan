@@ -49,9 +49,8 @@ def load_data(file_path):
             char = []
             for i in words:
                 for a in i:
-                    if not a in puncts:
-                        char.append(a)
-                    print(char)
+                    #if not a in puncts:
+                    char.append(a)
             data.append(words)
 
     return data
@@ -161,10 +160,20 @@ class GeneratorPretrainingGenerator(Sequence):
         self.raw_vocab = self.vocab.raw_vocab
         self.V = len(self.vocab.word2id)
         filenames = glob.glob(path)
+        data = []
         for fn in filenames:
-            with open(fn, 'r', encoding='utf-8') as f:
-                self.n_data = sum(1 for line in f)
-        
+            #with open(fn, 'r', encoding='utf-8') as f:
+            for line in open(fn, encoding='utf-8'):
+                words = line.strip().split()
+                char = []
+                for i in words:
+                    for a in i:
+                        #if not a in puncts:
+                        char.append(a)
+                data.append(words)
+                
+                #self.n_data = sum(1 for line in f)
+        self.n_data = sum(1 for line in data)
         self.shuffle = shuffle
         self.idx = 0
         self.len = self.__len__()
@@ -321,9 +330,21 @@ class DiscriminatorGenerator(Sequence):
         self.raw_vocab = self.vocab.raw_vocab
         self.V = len(self.vocab.word2id)
         filenames = glob.glob(path_pos)
+        data = []
         for fn in filenames:
-            with open(fn, 'r', encoding='utf-8') as f:
-                self.n_data_pos = sum(1 for line in f)
+            #with open(fn, 'r', encoding='utf-8') as f:
+            for line in open(fn, encoding='utf-8'):
+                words = line.strip().split()
+                char = []
+                for i in words:
+                    for a in i:
+                        #if not a in puncts:
+                        char.append(a)
+                data.append(words)
+                
+                #self.n_data_pos = sum(1 for line in f)
+        self.n_data_pos = sum(1 for line in data)
+                
         with open(path_neg, 'r', encoding='utf-8') as f:
             self.n_data_neg = sum(1 for line in f)
 
