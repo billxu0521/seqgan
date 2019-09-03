@@ -7,6 +7,8 @@ import glob
 
 import code
 
+puncts = "\t .!?#$%&\'()*+,-/:;<=>@[\]^_`{|}~！？｡。'\"＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏'・·　"
+
 class Vocab:
     def __init__(self, word2id, unk_token):
         self.word2id = dict(word2id)
@@ -44,6 +46,12 @@ def load_data(file_path):
     for fn in filenames:
         for line in open(fn, encoding='utf-8'):
             words = line.strip().split()
+            char = []
+            for i in words:
+                for a in i:
+                    if not a in puncts:
+                        char.append(a)
+                    print(char)
             data.append(words)
 
     return data
